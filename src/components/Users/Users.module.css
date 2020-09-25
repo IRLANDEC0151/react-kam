@@ -1,0 +1,30 @@
+.userPhoto{
+    width: 50px;
+}
+.avatarDiv{
+    display: inline-block;
+    width:70px
+}
+.userInfo{
+    margin-left: 40px;
+    display: inline-block;
+    border: 1px solid black;
+    
+    border-radius: 10px;
+    width: 600px;
+}
+
+.leftInfo{
+    float: left;
+}
+.leftInfo span{
+    display: block;
+    margin: 10px 10px;
+}
+.rightInfo span{
+    margin: 10px 10px;
+    display: block;
+}
+.rightInfo{
+    float: right;
+}
