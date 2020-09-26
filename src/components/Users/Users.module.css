@@ -28,3 +28,7 @@
 .rightInfo{
     float: right;
 }
+
+.selectedPage{
+    font-weight: bold;
+}

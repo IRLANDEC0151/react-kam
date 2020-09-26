@@ -3,15 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.setUsersActionCreator = exports.unFollowUserToFriendsActionCreator = exports.followUserToFriendsActionCreator = exports.uploadUsersActionCreator = void 0;
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+exports["default"] = exports.setTotalUserCountActionCreator = exports.setCurrentPageActionCreator = exports.setUsersActionCreator = exports.unFollowUserToFriendsActionCreator = exports.followUserToFriendsActionCreator = exports.uploadUsersActionCreator = void 0;
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -23,8 +15,13 @@ var UPLOAD_USERS = 'UPLOAD-USERS';
 var FOLLOW_USER_TO_FRIENDS = 'FOLLOW-USER-TO-FRIENDS';
 var UNFOLLOW_USER_TO_FRIENDS = 'UNFOLLOW-USER-TO-FRIENDS';
 var SET_USERS = 'SET-USERS';
+var SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
+var SET_TOTAL_USERS_COUNT = 'SET-TOTAL-USERS-COUNT';
 var initialState = {
-  users: []
+  users: [],
+  pageSize: 90,
+  totalUsersCount: 0,
+  currentPage: 1
 };
 
 var usersReducer = function usersReducer() {
@@ -70,7 +67,21 @@ var usersReducer = function usersReducer() {
     case SET_USERS:
       {
         return _objectSpread({}, state, {
-          users: [].concat(_toConsumableArray(state.users), _toConsumableArray(action.users))
+          users: action.users
+        });
+      }
+
+    case SET_CURRENT_PAGE:
+      {
+        return _objectSpread({}, state, {
+          currentPage: action.currentPage
+        });
+      }
+
+    case SET_TOTAL_USERS_COUNT:
+      {
+        return _objectSpread({}, state, {
+          totalUsersCount: action.totalUsersCount
         });
       }
 
@@ -113,5 +124,23 @@ var setUsersActionCreator = function setUsersActionCreator(users) {
 };
 
 exports.setUsersActionCreator = setUsersActionCreator;
+
+var setCurrentPageActionCreator = function setCurrentPageActionCreator(currentPage) {
+  return {
+    type: SET_CURRENT_PAGE,
+    currentPage: currentPage
+  };
+};
+
+exports.setCurrentPageActionCreator = setCurrentPageActionCreator;
+
+var setTotalUserCountActionCreator = function setTotalUserCountActionCreator(totalUsersCount) {
+  return {
+    type: SET_TOTAL_USERS_COUNT,
+    totalUsersCount: totalUsersCount
+  };
+};
+
+exports.setTotalUserCountActionCreator = setTotalUserCountActionCreator;
 var _default = usersReducer;
 exports["default"] = _default;

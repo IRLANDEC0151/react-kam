@@ -2,10 +2,15 @@ const UPLOAD_USERS = 'UPLOAD-USERS'
 const FOLLOW_USER_TO_FRIENDS = 'FOLLOW-USER-TO-FRIENDS'
 const UNFOLLOW_USER_TO_FRIENDS = 'UNFOLLOW-USER-TO-FRIENDS'
 const SET_USERS = 'SET-USERS'
+const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
+const SET_TOTAL_USERS_COUNT = 'SET-TOTAL-USERS-COUNT'
 
 let initialState = {
     users: [
-       ]
+    ],
+    pageSize: 90,
+    totalUsersCount: 0,
+    currentPage: 1
 }
 const usersReducer = (state = initialState, action) => {
 
@@ -35,7 +40,17 @@ const usersReducer = (state = initialState, action) => {
         }
         case SET_USERS: {
             return {
-                ...state, users: [...state.users, ...action.users]
+                ...state, users: action.users
+            }
+        }
+        case SET_CURRENT_PAGE: {
+            return {
+                ...state, currentPage: action.currentPage
+            }
+        } 
+         case SET_TOTAL_USERS_COUNT: {
+            return {
+                ...state, totalUsersCount: action.totalUsersCount
             }
         }
         default:
@@ -49,4 +64,6 @@ export const unFollowUserToFriendsActionCreator = (userId) => ({
     userId
 })
 export const setUsersActionCreator = (users) => ({ type: SET_USERS, users })
-export default usersReducer
+export const setCurrentPageActionCreator = (currentPage) => ({ type: SET_CURRENT_PAGE, currentPage })
+export const setTotalUserCountActionCreator = (totalUsersCount) => ({ type: SET_TOTAL_USERS_COUNT, totalUsersCount })
+export default usersReducer 
