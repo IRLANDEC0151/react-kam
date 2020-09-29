@@ -7,6 +7,8 @@ exports["default"] = void 0;
 
 var _redux = require("redux");
 
+var _authReducer = _interopRequireDefault(require("./auth-Reducer"));
+
 var _dialogsReducer = _interopRequireDefault(require("./dialogsReducer"));
 
 var _profileReducer = _interopRequireDefault(require("./profileReducer"));
@@ -21,7 +23,8 @@ var reducers = (0, _redux.combineReducers)({
   profilePage: _profileReducer["default"],
   dialogsPage: _dialogsReducer["default"],
   usersPage: _usersReducer["default"],
-  sideBar: _sideBarReducer["default"]
+  sideBar: _sideBarReducer["default"],
+  auth: _authReducer["default"]
 });
 var store = (0, _redux.createStore)(reducers);
 var _default = store;

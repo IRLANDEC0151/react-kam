@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.setTotalUserCountActionCreator = exports.setCurrentPageActionCreator = exports.setUsersActionCreator = exports.unFollowUserToFriendsActionCreator = exports.followUserToFriendsActionCreator = exports.uploadUsersActionCreator = void 0;
+exports["default"] = exports.toggleIsFetching = exports.setTotalUserCount = exports.setCurrentPage = exports.setUsers = exports.unFollowUserToFriends = exports.followUserToFriends = exports.uploadUsers = void 0;
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -17,11 +17,13 @@ var UNFOLLOW_USER_TO_FRIENDS = 'UNFOLLOW-USER-TO-FRIENDS';
 var SET_USERS = 'SET-USERS';
 var SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 var SET_TOTAL_USERS_COUNT = 'SET-TOTAL-USERS-COUNT';
+var TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 var initialState = {
   users: [],
-  pageSize: 90,
+  pageSize: 10,
   totalUsersCount: 0,
-  currentPage: 1
+  currentPage: 1,
+  isFetching: false
 };
 
 var usersReducer = function usersReducer() {
@@ -85,62 +87,78 @@ var usersReducer = function usersReducer() {
         });
       }
 
+    case TOGGLE_IS_FETCHING:
+      {
+        return _objectSpread({}, state, {
+          isFetching: action.isFetching
+        });
+      }
+
     default:
       return state;
   }
 };
 
-var uploadUsersActionCreator = function uploadUsersActionCreator() {
+var uploadUsers = function uploadUsers() {
   return {
     type: UPLOAD_USERS
   };
 };
 
-exports.uploadUsersActionCreator = uploadUsersActionCreator;
+exports.uploadUsers = uploadUsers;
 
-var followUserToFriendsActionCreator = function followUserToFriendsActionCreator(userId) {
+var followUserToFriends = function followUserToFriends(userId) {
   return {
     type: FOLLOW_USER_TO_FRIENDS,
     userId: userId
   };
 };
 
-exports.followUserToFriendsActionCreator = followUserToFriendsActionCreator;
+exports.followUserToFriends = followUserToFriends;
 
-var unFollowUserToFriendsActionCreator = function unFollowUserToFriendsActionCreator(userId) {
+var unFollowUserToFriends = function unFollowUserToFriends(userId) {
   return {
     type: UNFOLLOW_USER_TO_FRIENDS,
     userId: userId
   };
 };
 
-exports.unFollowUserToFriendsActionCreator = unFollowUserToFriendsActionCreator;
+exports.unFollowUserToFriends = unFollowUserToFriends;
 
-var setUsersActionCreator = function setUsersActionCreator(users) {
+var setUsers = function setUsers(users) {
   return {
     type: SET_USERS,
     users: users
   };
 };
 
-exports.setUsersActionCreator = setUsersActionCreator;
+exports.setUsers = setUsers;
 
-var setCurrentPageActionCreator = function setCurrentPageActionCreator(currentPage) {
+var setCurrentPage = function setCurrentPage(currentPage) {
   return {
     type: SET_CURRENT_PAGE,
     currentPage: currentPage
   };
 };
 
-exports.setCurrentPageActionCreator = setCurrentPageActionCreator;
+exports.setCurrentPage = setCurrentPage;
 
-var setTotalUserCountActionCreator = function setTotalUserCountActionCreator(totalUsersCount) {
+var setTotalUserCount = function setTotalUserCount(totalUsersCount) {
   return {
     type: SET_TOTAL_USERS_COUNT,
     totalUsersCount: totalUsersCount
   };
 };
 
-exports.setTotalUserCountActionCreator = setTotalUserCountActionCreator;
+exports.setTotalUserCount = setTotalUserCount;
+
+var toggleIsFetching = function toggleIsFetching(isFetching) {
+  return {
+    type: TOGGLE_IS_FETCHING,
+    isFetching: isFetching
+  };
+};
+
+exports.toggleIsFetching = toggleIsFetching;
 var _default = usersReducer;
 exports["default"] = _default;

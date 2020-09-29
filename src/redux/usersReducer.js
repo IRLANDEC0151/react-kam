@@ -4,13 +4,15 @@ const UNFOLLOW_USER_TO_FRIENDS = 'UNFOLLOW-USER-TO-FRIENDS'
 const SET_USERS = 'SET-USERS'
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
 const SET_TOTAL_USERS_COUNT = 'SET-TOTAL-USERS-COUNT'
+const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
 
 let initialState = {
     users: [
     ],
-    pageSize: 90,
+    pageSize: 10,
     totalUsersCount: 0,
-    currentPage: 1
+    currentPage: 1,
+    isFetching: false
 }
 const usersReducer = (state = initialState, action) => {
 
@@ -47,23 +49,29 @@ const usersReducer = (state = initialState, action) => {
             return {
                 ...state, currentPage: action.currentPage
             }
-        } 
-         case SET_TOTAL_USERS_COUNT: {
+        }
+        case SET_TOTAL_USERS_COUNT: {
             return {
                 ...state, totalUsersCount: action.totalUsersCount
+            }
+        }
+        case TOGGLE_IS_FETCHING: {
+            return {
+                ...state, isFetching: action.isFetching
             }
         }
         default:
             return state
     }
 }
-export const uploadUsersActionCreator = () => ({ type: UPLOAD_USERS })
-export const followUserToFriendsActionCreator = (userId) => ({ type: FOLLOW_USER_TO_FRIENDS, userId })
-export const unFollowUserToFriendsActionCreator = (userId) => ({
+export const uploadUsers = () => ({ type: UPLOAD_USERS })
+export const followUserToFriends = (userId) => ({ type: FOLLOW_USER_TO_FRIENDS, userId })
+export const unFollowUserToFriends = (userId) => ({
     type: UNFOLLOW_USER_TO_FRIENDS,
     userId
 })
-export const setUsersActionCreator = (users) => ({ type: SET_USERS, users })
-export const setCurrentPageActionCreator = (currentPage) => ({ type: SET_CURRENT_PAGE, currentPage })
-export const setTotalUserCountActionCreator = (totalUsersCount) => ({ type: SET_TOTAL_USERS_COUNT, totalUsersCount })
+export const setUsers = (users) => ({ type: SET_USERS, users })
+export const setCurrentPage = (currentPage) => ({ type: SET_CURRENT_PAGE, currentPage })
+export const setTotalUserCount = (totalUsersCount) => ({ type: SET_TOTAL_USERS_COUNT, totalUsersCount })
+export const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching })
 export default usersReducer 

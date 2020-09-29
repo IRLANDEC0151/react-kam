@@ -16,14 +16,14 @@ let store = {
         messagesPage: {
 
             dialogsData: [
-                { id: 1, name: "Dima" },
+                { id: 1, name: "Dimaaaa" },
                 { id: 2, name: "Ivan" },
                 { id: 3, name: "Elena" },
             ],
             messagesData: [
                 { id: 1, message: "Hi" },
                 { id: 2, message: "Bye" },
-                { id: 3, message: "Okey" },
+                { id: 3, message: "Okeyyy" },
             ],
             newMessageBody: ''
         },

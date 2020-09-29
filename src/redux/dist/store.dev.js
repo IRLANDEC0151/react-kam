@@ -33,7 +33,7 @@ var store = {
     messagesPage: {
       dialogsData: [{
         id: 1,
-        name: "Dima"
+        name: "Dimaaaa"
       }, {
         id: 2,
         name: "Ivan"
@@ -49,7 +49,7 @@ var store = {
         message: "Bye"
       }, {
         id: 3,
-        message: "Okey"
+        message: "Okeyyy"
       }],
       newMessageBody: ''
     },

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.updateNewPostActionCreator = exports.addPostActionCreator = void 0;
+exports["default"] = exports.setUserProfile = exports.updateNewPostActionCreator = exports.addPostActionCreator = void 0;
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
@@ -21,6 +21,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var ADD_POST = 'ADD-POST';
 var UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
+var SET_USER_PROFILE = 'SET_USER_PROFILE';
 var initialState = {
   postsData: [{
     id: 1,
@@ -32,13 +33,13 @@ var initialState = {
     id: 3,
     message: "Second post"
   }],
-  newPost: 'it-kam'
+  newPost: 'it-kam',
+  profileInfo: null
 };
 
 var profileReducer = function profileReducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
   var action = arguments.length > 1 ? arguments[1] : undefined;
-  var stateCopy;
 
   switch (action.type) {
     case ADD_POST:
@@ -47,7 +48,7 @@ var profileReducer = function profileReducer() {
           id: 5,
           message: state.newPost
         };
-        return stateCopy = _objectSpread({}, state, {
+        return _objectSpread({}, state, {
           newPost: '',
           postsData: [].concat(_toConsumableArray(state.postsData), [newPost])
         });
@@ -55,8 +56,15 @@ var profileReducer = function profileReducer() {
 
     case UPDATE_NEW_POST_TEXT:
       {
-        return stateCopy = _objectSpread({}, state, {
+        return _objectSpread({}, state, {
           newPost: action.newText
+        });
+      }
+
+    case SET_USER_PROFILE:
+      {
+        return _objectSpread({}, state, {
+          profileInfo: action.profileInfo
         });
       }
 
@@ -81,5 +89,14 @@ var updateNewPostActionCreator = function updateNewPostActionCreator(text) {
 };
 
 exports.updateNewPostActionCreator = updateNewPostActionCreator;
+
+var setUserProfile = function setUserProfile(profileInfo) {
+  return {
+    type: SET_USER_PROFILE,
+    profileInfo: profileInfo
+  };
+};
+
+exports.setUserProfile = setUserProfile;
 var _default = profileReducer;
 exports["default"] = _default;
