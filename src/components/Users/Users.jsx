@@ -2,6 +2,7 @@ import React from "react";
 import s from "./Users.module.css";
 import userPhoto from "../../assets/img/user.png";
 import { NavLink } from "react-router-dom";
+import { followAPI } from "../../api/api";
 
 let Users = (props) => {
   let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
@@ -9,6 +10,7 @@ let Users = (props) => {
   for (let i = 1; i <= pagesCount; i++) {
     pages.push(i);
   }
+
   return (
     <div>
       <div>
@@ -28,7 +30,7 @@ let Users = (props) => {
       {props.users.map((u) => (
         <div key={u.id}>
           <div className={s.avatarDiv}>
-            <NavLink to={'/profile/'+u.id}>
+            <NavLink to={"/profile/" + u.id}>
               <div>
                 <img
                   src={u.photos.small || userPhoto}
@@ -40,16 +42,31 @@ let Users = (props) => {
             <div>
               {u.followed ? (
                 <button
+                  disabled={props.followingInProgress.some((id) => id === u.id)}
                   onClick={() => {
-                    props.unFollowUserToFriends(u.id);
+                    props.toggleIsFollowingInProgress(true, u.id);
+                    followAPI.unFollowUsers(u.id).then((resultCode) => {
+                      if (resultCode === 0) {
+                        props.unFollowUserToFriends(u.id);
+                      }
+                      props.toggleIsFollowingInProgress(false, u.id);
+                    });
                   }}
                 >
                   UnFollow
                 </button>
               ) : (
                 <button
+                  disabled={props.followingInProgress.some((id) => id === u.id)}
                   onClick={() => {
-                    props.followUserToFriends(u.id);
+                    props.toggleIsFollowingInProgress(true, u.id);
+
+                    followAPI.followUsers(u.id).then((resultCode) => {
+                      if (resultCode === 0) {
+                        props.followUserToFriends(u.id);
+                      }
+                      props.toggleIsFollowingInProgress(false, u.id);
+                    });
                   }}
                 >
                   Follow

@@ -3,7 +3,15 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.toggleIsFetching = exports.setTotalUserCount = exports.setCurrentPage = exports.setUsers = exports.unFollowUserToFriends = exports.followUserToFriends = exports.uploadUsers = void 0;
+exports["default"] = exports.toggleIsFollowingInProgress = exports.toggleIsFetching = exports.setTotalUserCount = exports.setCurrentPage = exports.setUsers = exports.unFollowUserToFriends = exports.followUserToFriends = exports.uploadUsers = void 0;
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -18,12 +26,14 @@ var SET_USERS = 'SET-USERS';
 var SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 var SET_TOTAL_USERS_COUNT = 'SET-TOTAL-USERS-COUNT';
 var TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
+var TOGGLE_IS_FOLLOWING_IN_PROGRESS = 'TOGGLE_IS_FOLLOWING_IN_PROGRESS';
 var initialState = {
   users: [],
-  pageSize: 10,
+  pageSize: 100,
   totalUsersCount: 0,
   currentPage: 1,
-  isFetching: false
+  isFetching: false,
+  followingInProgress: []
 };
 
 var usersReducer = function usersReducer() {
@@ -94,6 +104,15 @@ var usersReducer = function usersReducer() {
         });
       }
 
+    case TOGGLE_IS_FOLLOWING_IN_PROGRESS:
+      {
+        return _objectSpread({}, state, {
+          followingInProgress: action.isFetching ? [].concat(_toConsumableArray(state.followingInProgress), [action.userId]) : state.followingInProgress.filter(function (id) {
+            return id !== action.userId;
+          })
+        });
+      }
+
     default:
       return state;
   }
@@ -160,5 +179,15 @@ var toggleIsFetching = function toggleIsFetching(isFetching) {
 };
 
 exports.toggleIsFetching = toggleIsFetching;
+
+var toggleIsFollowingInProgress = function toggleIsFollowingInProgress(isFetching, userId) {
+  return {
+    type: TOGGLE_IS_FOLLOWING_IN_PROGRESS,
+    isFetching: isFetching,
+    userId: userId
+  };
+};
+
+exports.toggleIsFollowingInProgress = toggleIsFollowingInProgress;
 var _default = usersReducer;
 exports["default"] = _default;
