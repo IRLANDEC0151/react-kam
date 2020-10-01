@@ -3,7 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.toggleIsFollowingInProgress = exports.toggleIsFetching = exports.setTotalUserCount = exports.setCurrentPage = exports.setUsers = exports.unFollowUserToFriends = exports.followUserToFriends = exports.uploadUsers = void 0;
+exports["default"] = exports.acceptFollowThunkCreator = exports.getUsersThunkCreator = exports.toggleIsFollowingInProgress = exports.toggleIsFetching = exports.setTotalUserCount = exports.setCurrentPage = exports.setUsers = exports.unFollowUserToFriends = exports.followUserToFriends = exports.uploadUsers = void 0;
+
+var _api = require("../api/api");
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
@@ -186,8 +188,39 @@ var toggleIsFollowingInProgress = function toggleIsFollowingInProgress(isFetchin
     isFetching: isFetching,
     userId: userId
   };
-};
+}; //thunk
+
 
 exports.toggleIsFollowingInProgress = toggleIsFollowingInProgress;
+
+var getUsersThunkCreator = function getUsersThunkCreator(currentPage, pageSize) {
+  return function (dispatch) {
+    dispatch(toggleIsFetching(true));
+
+    _api.userAPI.getUsers(currentPage, pageSize).then(function (data) {
+      dispatch(setCurrentPage(currentPage));
+      dispatch(toggleIsFetching(false));
+      dispatch(setUsers(data.items));
+      dispatch(setTotalUserCount(data.totalCount));
+    });
+  };
+};
+
+exports.getUsersThunkCreator = getUsersThunkCreator;
+
+var acceptFollowThunkCreator = function acceptFollowThunkCreator(currentPage, pageSize) {
+  return function (dispatch) {
+    dispatch(toggleIsFetching(true));
+
+    _api.userAPI.getUsers(currentPage, pageSize).then(function (data) {
+      dispatch(setCurrentPage(currentPage));
+      dispatch(toggleIsFetching(false));
+      dispatch(setUsers(data.items));
+      dispatch(setTotalUserCount(data.totalCount));
+    });
+  };
+};
+
+exports.acceptFollowThunkCreator = acceptFollowThunkCreator;
 var _default = usersReducer;
 exports["default"] = _default;

@@ -5,7 +5,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.followAPI = exports.userAPI = void 0;
+exports.userAPI = void 0;
 
 var axios = _interopRequireWildcard(require("axios"));
 
@@ -27,10 +27,7 @@ var userAPI = {
     return instance.get("users?page=".concat(currentPage, "&count=").concat(pageSize)).then(function (res) {
       return res.data;
     });
-  }
-};
-exports.userAPI = userAPI;
-var followAPI = {
+  },
   followUsers: function followUsers(userId) {
     return instance.post("follow/".concat(userId)).then(function (res) {
       return res.data.resultCode;
@@ -42,4 +39,4 @@ var followAPI = {
     });
   }
 };
-exports.followAPI = followAPI;
+exports.userAPI = userAPI;

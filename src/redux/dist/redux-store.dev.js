@@ -17,6 +17,8 @@ var _sideBarReducer = _interopRequireDefault(require("./sideBarReducer"));
 
 var _usersReducer = _interopRequireDefault(require("./usersReducer"));
 
+var _reduxThunk = _interopRequireDefault(require("redux-thunk"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var reducers = (0, _redux.combineReducers)({
@@ -26,6 +28,6 @@ var reducers = (0, _redux.combineReducers)({
   sideBar: _sideBarReducer["default"],
   auth: _authReducer["default"]
 });
-var store = (0, _redux.createStore)(reducers);
+var store = (0, _redux.createStore)(reducers, (0, _redux.applyMiddleware)(_reduxThunk["default"]));
 var _default = store;
 exports["default"] = _default;

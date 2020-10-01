@@ -1,3 +1,5 @@
+import { userAPI } from "../api/api";
+
 const UPLOAD_USERS = 'UPLOAD-USERS'
 const FOLLOW_USER_TO_FRIENDS = 'FOLLOW-USER-TO-FRIENDS'
 const UNFOLLOW_USER_TO_FRIENDS = 'UNFOLLOW-USER-TO-FRIENDS'
@@ -64,8 +66,8 @@ const usersReducer = (state = initialState, action) => {
         } case TOGGLE_IS_FOLLOWING_IN_PROGRESS: {
             return {
                 ...state, followingInProgress: action.isFetching ?
-                    [...state.followingInProgress,action.userId]
-                    :  state.followingInProgress.filter(id => id !== action.userId)
+                    [...state.followingInProgress, action.userId]
+                    : state.followingInProgress.filter(id => id !== action.userId)
             }
         }
         default:
@@ -83,4 +85,32 @@ export const setCurrentPage = (currentPage) => ({ type: SET_CURRENT_PAGE, curren
 export const setTotalUserCount = (totalUsersCount) => ({ type: SET_TOTAL_USERS_COUNT, totalUsersCount })
 export const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching })
 export const toggleIsFollowingInProgress = (isFetching, userId) => ({ type: TOGGLE_IS_FOLLOWING_IN_PROGRESS, isFetching, userId })
+
+//thunk
+export const getUsersThunkCreator = (currentPage, pageSize) => {
+    return (dispatch) => {
+        dispatch(toggleIsFetching(true));
+        userAPI
+            .getUsers(currentPage, pageSize)
+            .then((data) => {
+                dispatch(setCurrentPage(currentPage))
+                dispatch(toggleIsFetching(false));
+                dispatch(setUsers(data.items));
+                dispatch(setTotalUserCount(data.totalCount));
+            });
+    }
+}
+export const acceptFollowThunkCreator = (currentPage, pageSize) => {
+    return (dispatch) => {
+        dispatch(toggleIsFetching(true));
+        userAPI
+            .getUsers(currentPage, pageSize)
+            .then((data) => {
+                dispatch(setCurrentPage(currentPage))
+                dispatch(toggleIsFetching(false));
+                dispatch(setUsers(data.items));
+                dispatch(setTotalUserCount(data.totalCount));
+            });
+    }
+}
 export default usersReducer 
