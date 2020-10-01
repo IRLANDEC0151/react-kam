@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.acceptFollowThunkCreator = exports.getUsersThunkCreator = exports.toggleIsFollowingInProgress = exports.toggleIsFetching = exports.setTotalUserCount = exports.setCurrentPage = exports.setUsers = exports.unFollowUserToFriends = exports.followUserToFriends = exports.uploadUsers = void 0;
+exports["default"] = exports.unFollowThunkCreator = exports.followThunkCreator = exports.getUsersThunkCreator = exports.toggleIsFollowingInProgress = exports.toggleIsFetching = exports.setTotalUserCount = exports.setCurrentPage = exports.setUsers = exports.acceptUnFollowUserToFriends = exports.acceptFollowUserToFriends = exports.uploadUsers = void 0;
 
 var _api = require("../api/api");
 
@@ -128,23 +128,23 @@ var uploadUsers = function uploadUsers() {
 
 exports.uploadUsers = uploadUsers;
 
-var followUserToFriends = function followUserToFriends(userId) {
+var acceptFollowUserToFriends = function acceptFollowUserToFriends(userId) {
   return {
     type: FOLLOW_USER_TO_FRIENDS,
     userId: userId
   };
 };
 
-exports.followUserToFriends = followUserToFriends;
+exports.acceptFollowUserToFriends = acceptFollowUserToFriends;
 
-var unFollowUserToFriends = function unFollowUserToFriends(userId) {
+var acceptUnFollowUserToFriends = function acceptUnFollowUserToFriends(userId) {
   return {
     type: UNFOLLOW_USER_TO_FRIENDS,
     userId: userId
   };
 };
 
-exports.unFollowUserToFriends = unFollowUserToFriends;
+exports.acceptUnFollowUserToFriends = acceptUnFollowUserToFriends;
 
 var setUsers = function setUsers(users) {
   return {
@@ -208,19 +208,36 @@ var getUsersThunkCreator = function getUsersThunkCreator(currentPage, pageSize) 
 
 exports.getUsersThunkCreator = getUsersThunkCreator;
 
-var acceptFollowThunkCreator = function acceptFollowThunkCreator(currentPage, pageSize) {
+var followThunkCreator = function followThunkCreator(userId) {
   return function (dispatch) {
-    dispatch(toggleIsFetching(true));
+    dispatch(toggleIsFollowingInProgress(true, userId));
 
-    _api.userAPI.getUsers(currentPage, pageSize).then(function (data) {
-      dispatch(setCurrentPage(currentPage));
-      dispatch(toggleIsFetching(false));
-      dispatch(setUsers(data.items));
-      dispatch(setTotalUserCount(data.totalCount));
+    _api.userAPI.followUsers(userId).then(function (resultCode) {
+      if (resultCode === 0) {
+        dispatch(acceptFollowUserToFriends(userId));
+      }
+
+      dispatch(toggleIsFollowingInProgress(false, userId));
     });
   };
 };
 
-exports.acceptFollowThunkCreator = acceptFollowThunkCreator;
+exports.followThunkCreator = followThunkCreator;
+
+var unFollowThunkCreator = function unFollowThunkCreator(userId) {
+  return function (dispatch) {
+    dispatch(toggleIsFollowingInProgress(true, userId));
+
+    _api.userAPI.unFollowUsers(userId).then(function (resultCode) {
+      if (resultCode === 0) {
+        dispatch(acceptUnFollowUserToFriends(userId));
+      }
+
+      dispatch(toggleIsFollowingInProgress(false, userId));
+    });
+  };
+};
+
+exports.unFollowThunkCreator = unFollowThunkCreator;
 var _default = usersReducer;
 exports["default"] = _default;

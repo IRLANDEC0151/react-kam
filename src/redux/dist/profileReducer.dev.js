@@ -3,7 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.setUserProfile = exports.updateNewPostActionCreator = exports.addPostActionCreator = void 0;
+exports["default"] = exports.getUserProfile = exports.setUserProfile = exports.updateNewPostActionCreator = exports.addPostActionCreator = void 0;
+
+var _api = require("../api/api");
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
@@ -95,8 +97,19 @@ var setUserProfile = function setUserProfile(profileInfo) {
     type: SET_USER_PROFILE,
     profileInfo: profileInfo
   };
-};
+}; //thunk
+
 
 exports.setUserProfile = setUserProfile;
+
+var getUserProfile = function getUserProfile(userId) {
+  return function (dispatch) {
+    return _api.userAPI.getProfile(userId).then(function (data) {
+      dispatch(setUserProfile(data));
+    });
+  };
+};
+
+exports.getUserProfile = getUserProfile;
 var _default = profileReducer;
 exports["default"] = _default;

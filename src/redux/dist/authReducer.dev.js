@@ -52,17 +52,19 @@ var setAuthUserData = function setAuthUserData(userId, email, login) {
 
 exports.setAuthUserData = setAuthUserData;
 
-var getAuthUserData = function getAuthUserData(dispatch) {
-  return _api.authAPI.me().then(function (data) {
-    if (data.resultCode === 0) {
-      var _data$data = data.data,
-          _data$data$userId = _data$data.userId,
-          userId = _data$data$userId === void 0 ? data.data.id : _data$data$userId,
-          email = _data$data.email,
-          login = _data$data.login;
-      dispatch(setAuthUserData(userId, email, login));
-    }
-  });
+var getAuthUserData = function getAuthUserData() {
+  return function (dispatch) {
+    _api.authAPI.me().then(function (data) {
+      if (data.resultCode === 0) {
+        var _data$data = data.data,
+            _data$data$userId = _data$data.userId,
+            userId = _data$data$userId === void 0 ? data.data.id : _data$data$userId,
+            email = _data$data.email,
+            login = _data$data.login;
+        dispatch(setAuthUserData(userId, email, login));
+      }
+    });
+  };
 };
 
 exports.getAuthUserData = getAuthUserData;

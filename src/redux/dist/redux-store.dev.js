@@ -7,7 +7,7 @@ exports["default"] = void 0;
 
 var _redux = require("redux");
 
-var _authReducer = _interopRequireDefault(require("./auth-Reducer"));
+var _authReducer = _interopRequireDefault(require("./authReducer"));
 
 var _dialogsReducer = _interopRequireDefault(require("./dialogsReducer"));
 

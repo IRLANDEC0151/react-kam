@@ -75,8 +75,8 @@ const usersReducer = (state = initialState, action) => {
     }
 }
 export const uploadUsers = () => ({ type: UPLOAD_USERS })
-export const followUserToFriends = (userId) => ({ type: FOLLOW_USER_TO_FRIENDS, userId })
-export const unFollowUserToFriends = (userId) => ({
+export const acceptFollowUserToFriends = (userId) => ({ type: FOLLOW_USER_TO_FRIENDS, userId })
+export const acceptUnFollowUserToFriends = (userId) => ({
     type: UNFOLLOW_USER_TO_FRIENDS,
     userId
 })
@@ -100,17 +100,27 @@ export const getUsersThunkCreator = (currentPage, pageSize) => {
             });
     }
 }
-export const acceptFollowThunkCreator = (currentPage, pageSize) => {
+export const followThunkCreator = (userId) => {
     return (dispatch) => {
-        dispatch(toggleIsFetching(true));
-        userAPI
-            .getUsers(currentPage, pageSize)
-            .then((data) => {
-                dispatch(setCurrentPage(currentPage))
-                dispatch(toggleIsFetching(false));
-                dispatch(setUsers(data.items));
-                dispatch(setTotalUserCount(data.totalCount));
-            });
+        dispatch(toggleIsFollowingInProgress(true, userId));
+        userAPI.followUsers(userId).then((resultCode) => {
+            if (resultCode === 0) {
+                dispatch(acceptFollowUserToFriends(userId));
+            }
+            dispatch(toggleIsFollowingInProgress(false, userId));
+        });
+    }
+}
+
+export const unFollowThunkCreator = (userId) => {
+    return (dispatch) => {
+        dispatch(toggleIsFollowingInProgress(true, userId));
+        userAPI.unFollowUsers(userId).then((resultCode) => {
+            if (resultCode === 0) {
+                dispatch(acceptUnFollowUserToFriends(userId));
+            }
+            dispatch(toggleIsFollowingInProgress(false, userId));
+        });
     }
 }
 export default usersReducer 
