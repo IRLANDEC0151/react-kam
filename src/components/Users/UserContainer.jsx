@@ -10,6 +10,8 @@ import {
 } from "../../redux/usersReducer";
 import Users from "./Users.jsx";
 import Preloader from "../common/preloader/preloader";
+import { withAuthRedirect } from "../../hoc/withAuthRedirect";
+import { compose } from "redux";
 
 class UsersContainer extends React.Component {
   componentDidMount() {
@@ -50,11 +52,14 @@ let mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, {
-  acceptFollowUserToFriends,
-  acceptUnFollowUserToFriends,
-  toggleIsFollowingInProgress,
-  getUsers: getUsersThunkCreator,
-  follow: followThunkCreator,
-  unFollow: unFollowThunkCreator,
-})(UsersContainer);
+export default compose(
+  connect(mapStateToProps, {
+    acceptFollowUserToFriends,
+    acceptUnFollowUserToFriends,
+    toggleIsFollowingInProgress,
+    getUsers: getUsersThunkCreator,
+    follow: followThunkCreator,
+    unFollow: unFollowThunkCreator,
+  }),
+  withAuthRedirect
+)(UsersContainer);
