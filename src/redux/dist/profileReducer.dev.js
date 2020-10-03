@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.getUserProfile = exports.setUserProfile = exports.updateNewPostActionCreator = exports.addPostActionCreator = void 0;
+exports["default"] = exports.updateUserStatus = exports.getUserStatus = exports.getUserProfile = exports.setUserStatus = exports.setUserProfile = exports.updateNewPostActionCreator = exports.addPostActionCreator = void 0;
 
 var _api = require("../api/api");
 
@@ -24,6 +24,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var ADD_POST = 'ADD-POST';
 var UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
 var SET_USER_PROFILE = 'SET_USER_PROFILE';
+var SET_STATUS = 'SET_STATUS';
 var initialState = {
   postsData: [{
     id: 1,
@@ -36,7 +37,8 @@ var initialState = {
     message: "Second post"
   }],
   newPost: 'it-kam',
-  profileInfo: null
+  profileInfo: null,
+  status: ''
 };
 
 var profileReducer = function profileReducer() {
@@ -70,6 +72,13 @@ var profileReducer = function profileReducer() {
         });
       }
 
+    case SET_STATUS:
+      {
+        return _objectSpread({}, state, {
+          status: action.status
+        });
+      }
+
     default:
       return state;
   }
@@ -97,19 +106,50 @@ var setUserProfile = function setUserProfile(profileInfo) {
     type: SET_USER_PROFILE,
     profileInfo: profileInfo
   };
-}; //thunk
-
+};
 
 exports.setUserProfile = setUserProfile;
 
+var setUserStatus = function setUserStatus(status) {
+  return {
+    type: SET_STATUS,
+    status: status
+  };
+}; //thunk
+
+
+exports.setUserStatus = setUserStatus;
+
 var getUserProfile = function getUserProfile(userId) {
   return function (dispatch) {
-    return _api.userAPI.getProfile(userId).then(function (data) {
+    return _api.profileAPI.getProfile(userId).then(function (data) {
       dispatch(setUserProfile(data));
     });
   };
 };
 
 exports.getUserProfile = getUserProfile;
+
+var getUserStatus = function getUserStatus(userId) {
+  return function (dispatch) {
+    return _api.profileAPI.getStatus(userId).then(function (res) {
+      dispatch(setUserStatus(res));
+    });
+  };
+};
+
+exports.getUserStatus = getUserStatus;
+
+var updateUserStatus = function updateUserStatus(status) {
+  return function (dispatch) {
+    return _api.profileAPI.getStatus(status).then(function (res) {
+      if (res.data.resultCode === 0) {
+        dispatch(setUserStatus(status));
+      }
+    });
+  };
+};
+
+exports.updateUserStatus = updateUserStatus;
 var _default = profileReducer;
 exports["default"] = _default;

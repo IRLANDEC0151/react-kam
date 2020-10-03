@@ -9,12 +9,9 @@ const ProfileInfo = (props) => {
   }
   return (
     <div>
-      <div>
-     
-      </div>
       <div className={s.descriptionBlock}>
-        <img src={props.profileInfo.photos.large} alt='img'/>
-        <ProfileStatus status={"status"}/>
+        <img src={props.profileInfo.photos.large} alt="img" />
+        <ProfileStatus status={props.status} />
       </div>
     </div>
   );

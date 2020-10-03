@@ -5,7 +5,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.authAPI = exports.userAPI = void 0;
+exports.authAPI = exports.profileAPI = exports.userAPI = void 0;
 
 var axios = _interopRequireWildcard(require("axios"));
 
@@ -37,14 +37,27 @@ var userAPI = {
     return instance["delete"]("follow/".concat(userId)).then(function (res) {
       return res.data.resultCode;
     });
-  },
+  }
+};
+exports.userAPI = userAPI;
+var profileAPI = {
   getProfile: function getProfile(userId) {
     return instance.get("profile/".concat(userId)).then(function (res) {
       return res.data;
     });
+  },
+  getStatus: function getStatus(userId) {
+    return instance.get("profile/status/".concat(userId)).then(function (res) {
+      return res.data;
+    });
+  },
+  updateStatus: function updateStatus(status) {
+    return instance.put("profile/status/", {
+      status: status
+    });
   }
 };
-exports.userAPI = userAPI;
+exports.profileAPI = profileAPI;
 var authAPI = {
   me: function me() {
     return instance.get("auth/me").then(function (res) {
