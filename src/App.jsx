@@ -15,9 +15,9 @@ const App = (props) => {
   return (
     <BrowserRouter>
       <div className="app-wrapper">
-        <HeaderContainer />
+        <HeaderContainer /> 
         <NavBar />
-        <div className="app-wrapper-content">
+        <div className="app-wrapper-content">  
           <Route path="/dialogs" render={() => <DialogContainer />} />
           <Route path="/profile/:userId?" render={() => <ProfileContainer />} />
           <Route path="/news" render={() => <News />} />
@@ -26,7 +26,7 @@ const App = (props) => {
           <Route path="/users" render={() => <UserContainer />} />
           <Route path="/login" render={() => <Login/>} />
         </div>
-      </div>
+      </div> 
     </BrowserRouter>
   );
 };

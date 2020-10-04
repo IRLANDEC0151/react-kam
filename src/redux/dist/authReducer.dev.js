@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.getAuthUserData = exports.setAuthUserData = void 0;
+exports["default"] = exports.postAuthUserData = exports.getAuthUserData = exports.setAuthUserData = void 0;
 
 var _api = require("../api/api");
 
@@ -65,8 +65,19 @@ var getAuthUserData = function getAuthUserData() {
       }
     });
   };
-};
+}; //thunk 
+
 
 exports.getAuthUserData = getAuthUserData;
+
+var postAuthUserData = function postAuthUserData(data) {
+  return function (dispatch) {
+    _api.authAPI.login(data).then(function (data) {
+      console.log(data);
+    });
+  };
+};
+
+exports.postAuthUserData = postAuthUserData;
 var _default = authReducer;
 exports["default"] = _default;

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.updateUserStatus = exports.getUserStatus = exports.getUserProfile = exports.setUserStatus = exports.setUserProfile = exports.updateNewPostActionCreator = exports.addPostActionCreator = void 0;
+exports["default"] = exports.updateUserStatus = exports.getUserStatus = exports.getUserProfile = exports.setUserStatus = exports.setUserProfile = exports.addPostActionCreator = void 0;
 
 var _api = require("../api/api");
 
@@ -36,7 +36,6 @@ var initialState = {
     id: 3,
     message: "Second post"
   }],
-  newPost: 'it-kam',
   profileInfo: null,
   status: ''
 };
@@ -49,19 +48,11 @@ var profileReducer = function profileReducer() {
     case ADD_POST:
       {
         var newPost = {
-          id: 5,
-          message: state.newPost
+          id: state.postsData.length + 1,
+          message: action.newPostBody
         };
         return _objectSpread({}, state, {
-          newPost: '',
           postsData: [].concat(_toConsumableArray(state.postsData), [newPost])
-        });
-      }
-
-    case UPDATE_NEW_POST_TEXT:
-      {
-        return _objectSpread({}, state, {
-          newPost: action.newText
         });
       }
 
@@ -84,22 +75,14 @@ var profileReducer = function profileReducer() {
   }
 };
 
-var addPostActionCreator = function addPostActionCreator() {
+var addPostActionCreator = function addPostActionCreator(newPostBody) {
   return {
-    type: ADD_POST
+    type: ADD_POST,
+    newPostBody: newPostBody
   };
 };
 
 exports.addPostActionCreator = addPostActionCreator;
-
-var updateNewPostActionCreator = function updateNewPostActionCreator(text) {
-  return {
-    type: UPDATE_NEW_POST_TEXT,
-    newText: text
-  };
-};
-
-exports.updateNewPostActionCreator = updateNewPostActionCreator;
 
 var setUserProfile = function setUserProfile(profileInfo) {
   return {
@@ -142,7 +125,7 @@ exports.getUserStatus = getUserStatus;
 
 var updateUserStatus = function updateUserStatus(status) {
   return function (dispatch) {
-    return _api.profileAPI.getStatus(status).then(function (res) {
+    return _api.profileAPI.updateStatus(status).then(function (res) {
       if (res.data.resultCode === 0) {
         dispatch(setUserStatus(status));
       }

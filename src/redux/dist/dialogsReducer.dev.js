@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.updateNewMessageBodyActionCreator = exports.sendMessageActionCreator = void 0;
+exports["default"] = exports.sendMessageActionCreator = void 0;
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
@@ -19,7 +19,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var UPDATE_NEW_MESSAGE_BODY = 'UPDATE-NEW-MESSAGE-BODY';
 var SEND_MESSAGE = 'SEND-MESSAGE';
 var initialState = {
   dialogsData: [{
@@ -41,8 +40,7 @@ var initialState = {
   }, {
     id: 3,
     message: "Okey"
-  }],
-  newMessageBody: ''
+  }]
 };
 
 var dialogsReducer = function dialogsReducer() {
@@ -56,20 +54,12 @@ var dialogsReducer = function dialogsReducer() {
   switch (action.type) {
     case SEND_MESSAGE:
       {
-        var body = stateCopy.newMessageBody;
+        var body = action.newMessageBody;
         return stateCopy = _objectSpread({}, state, {
           messagesData: [].concat(_toConsumableArray(state.messagesData), [{
             id: stateCopy.messagesData.length + 1,
             message: body
-          }]),
-          newMessageBody: ''
-        });
-      }
-
-    case UPDATE_NEW_MESSAGE_BODY:
-      {
-        return stateCopy = _objectSpread({}, state, {
-          newMessageBody: action.newText
+          }])
         });
       }
 
@@ -78,21 +68,13 @@ var dialogsReducer = function dialogsReducer() {
   }
 };
 
-var sendMessageActionCreator = function sendMessageActionCreator() {
+var sendMessageActionCreator = function sendMessageActionCreator(newMessageBody) {
   return {
-    type: SEND_MESSAGE
+    type: SEND_MESSAGE,
+    newMessageBody: newMessageBody
   };
 };
 
 exports.sendMessageActionCreator = sendMessageActionCreator;
-
-var updateNewMessageBodyActionCreator = function updateNewMessageBodyActionCreator(text) {
-  return {
-    type: UPDATE_NEW_MESSAGE_BODY,
-    newText: text
-  };
-};
-
-exports.updateNewMessageBodyActionCreator = updateNewMessageBodyActionCreator;
 var _default = dialogsReducer;
 exports["default"] = _default;

@@ -52,7 +52,7 @@ var profileAPI = {
     });
   },
   updateStatus: function updateStatus(status) {
-    return instance.put("profile/status/", {
+    return instance.put("profile/status", {
       status: status
     });
   }
@@ -61,6 +61,13 @@ exports.profileAPI = profileAPI;
 var authAPI = {
   me: function me() {
     return instance.get("auth/me").then(function (res) {
+      return res.data;
+    });
+  },
+  login: function login(data) {
+    return instance.post("auth/login", {
+      data: data
+    }).then(function (res) {
       return res.data;
     });
   }

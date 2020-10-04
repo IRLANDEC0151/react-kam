@@ -1,4 +1,4 @@
-import { profileAPI, userAPI } from "../api/api"
+import { profileAPI } from "../api/api"
 
 const ADD_POST = 'ADD-POST'
 const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT'
@@ -11,26 +11,21 @@ let initialState = {
         { id: 2, message: "First post" },
         { id: 3, message: "Second post" },
     ],
-    newPost: 'it-kam',
+
     profileInfo: null,
     status: ''
 }
 const profileReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_POST: {
-            let newPost = { id: 5, message: state.newPost }
+            let newPost = { id: state.postsData.length+1, message: action.newPostBody }
             return {
-                ...state, newPost: '',
+                ...state,
                 postsData: [...state.postsData,
                     newPost]
             }
         }
-        case UPDATE_NEW_POST_TEXT: {
-            return {
-                ...state,
-                newPost: action.newText
-            }
-        }
+     
         case SET_USER_PROFILE: {
             return {
                 ...state,
@@ -47,11 +42,8 @@ const profileReducer = (state = initialState, action) => {
             return state
     }
 }
-export const addPostActionCreator = () => ({ type: ADD_POST })
-export const updateNewPostActionCreator = (text) => ({
-    type: UPDATE_NEW_POST_TEXT,
-    newText: text,
-})
+export const addPostActionCreator = (newPostBody) => ({ type: ADD_POST, newPostBody })
+
 export const setUserProfile = (profileInfo) => ({ type: SET_USER_PROFILE, profileInfo })
 export const setUserStatus = (status) => ({ type: SET_STATUS, status })
 
@@ -69,7 +61,7 @@ export const getUserStatus = (userId) => (dispatch) => {
 }
 
 export const updateUserStatus = (status) => (dispatch) => {
-    return profileAPI.getStatus(status).then((res) => {
+    return profileAPI.updateStatus(status).then((res) => {
         if (res.data.resultCode === 0) {
             dispatch(setUserStatus(status));
         }
