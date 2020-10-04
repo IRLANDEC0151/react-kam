@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.postAuthUserData = exports.getAuthUserData = exports.setAuthUserData = void 0;
+exports["default"] = exports.logOut = exports.login = exports.getAuthUserData = exports.setAuthUserData = void 0;
 
 var _api = require("../api/api");
 
@@ -28,9 +28,7 @@ var authReducer = function authReducer() {
   switch (action.type) {
     case SET_USER_DATA:
       {
-        return _objectSpread({}, state, {}, action.data, {
-          isAuth: true
-        });
+        return _objectSpread({}, state, {}, action.data);
       }
 
     default:
@@ -38,13 +36,18 @@ var authReducer = function authReducer() {
   }
 };
 
-var setAuthUserData = function setAuthUserData(userId, email, login) {
+var setAuthUserData = function setAuthUserData() {
+  var userId = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var email = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var login = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  var isAuth = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
   return {
     type: SET_USER_DATA,
     data: {
       userId: userId,
       email: email,
-      login: login
+      login: login,
+      isAuth: isAuth
     }
   };
 }; //thunk 
@@ -60,8 +63,8 @@ var getAuthUserData = function getAuthUserData() {
             _data$data$userId = _data$data.userId,
             userId = _data$data$userId === void 0 ? data.data.id : _data$data$userId,
             email = _data$data.email,
-            login = _data$data.login;
-        dispatch(setAuthUserData(userId, email, login));
+            _login = _data$data.login;
+        dispatch(setAuthUserData(userId, email, _login, true));
       }
     });
   };
@@ -70,14 +73,29 @@ var getAuthUserData = function getAuthUserData() {
 
 exports.getAuthUserData = getAuthUserData;
 
-var postAuthUserData = function postAuthUserData(data) {
+var login = function login(data) {
   return function (dispatch) {
     _api.authAPI.login(data).then(function (data) {
-      console.log(data);
+      if (data.resultCode === 0) {
+        dispatch(getAuthUserData(data));
+      }
+    });
+  };
+}; //thunk 
+
+
+exports.login = login;
+
+var logOut = function logOut(data) {
+  return function (dispatch) {
+    _api.authAPI.loginOut().then(function (data) {
+      if (data.resultCode === 0) {
+        dispatch(setAuthUserData());
+      }
     });
   };
 };
 
-exports.postAuthUserData = postAuthUserData;
+exports.logOut = logOut;
 var _default = authReducer;
 exports["default"] = _default;

@@ -18,7 +18,7 @@ exports.requiredField = requiredField;
 var maxLength = function maxLength(length) {
   return function (value) {
     if (value.length > length) {
-      return 'error message';
+      return 'max length: 30';
     }
 
     return undefined;

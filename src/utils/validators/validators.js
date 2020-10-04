@@ -7,7 +7,7 @@ export const requiredField=(value)=>{
 
 export const maxLength=(length)=>(value)=>{
     if(value.length>length ){
-        return 'error message' 
+        return 'max length: 30' 
     }
     return undefined 
 }

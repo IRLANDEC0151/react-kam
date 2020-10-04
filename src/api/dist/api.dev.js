@@ -64,10 +64,21 @@ var authAPI = {
       return res.data;
     });
   },
-  login: function login(data) {
+  login: function login(_ref) {
+    var email = _ref.email,
+        password = _ref.password,
+        _ref$rememberMe = _ref.rememberMe,
+        rememberMe = _ref$rememberMe === void 0 ? false : _ref$rememberMe;
     return instance.post("auth/login", {
-      data: data
+      email: email,
+      password: password,
+      rememberMe: rememberMe
     }).then(function (res) {
+      return res.data;
+    });
+  },
+  loginOut: function loginOut(data) {
+    return instance["delete"]("auth/login").then(function (res) {
       return res.data;
     });
   }
