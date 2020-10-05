@@ -5,6 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = exports.logOut = exports.login = exports.getAuthUserData = exports.setAuthUserData = void 0;
 
+var _reduxForm = require("redux-form");
+
 var _api = require("../api/api");
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -57,7 +59,7 @@ exports.setAuthUserData = setAuthUserData;
 
 var getAuthUserData = function getAuthUserData() {
   return function (dispatch) {
-    _api.authAPI.me().then(function (data) {
+    return _api.authAPI.me().then(function (data) {
       if (data.resultCode === 0) {
         var _data$data = data.data,
             _data$data$userId = _data$data.userId,
@@ -65,6 +67,7 @@ var getAuthUserData = function getAuthUserData() {
             email = _data$data.email,
             _login = _data$data.login;
         dispatch(setAuthUserData(userId, email, _login, true));
+        return 'success';
       }
     });
   };
@@ -78,6 +81,10 @@ var login = function login(data) {
     _api.authAPI.login(data).then(function (data) {
       if (data.resultCode === 0) {
         dispatch(getAuthUserData(data));
+      } else {
+        dispatch((0, _reduxForm.stopSubmit)("login", {
+          _error: data.messages[0]
+        }));
       }
     });
   };
