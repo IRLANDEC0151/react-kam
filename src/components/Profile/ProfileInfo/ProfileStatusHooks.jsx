@@ -1,18 +1,22 @@
-import React from "react";
-// import s from "./ProfileStatus.module.css";
+import React, { useEffect, useState } from "react";
 
 const ProfileStatusHooks = (props) => {
   const [editMode, setEditMode] = useState(false);
   const [status, setStatus] = useState(props.status);
 
-  activateEditMode = () => {
+  const activateEditMode = () => {
     setEditMode(true);
   };
 
-  deactivateEditMode = (e) => {
+  const deactivateEditMode = (e) => {
     setEditMode(false);
     setStatus(e.currentTarget.value);
+    props.updateUserStatus(e.currentTarget.value);
   };
+
+  useEffect(() => {
+    console.log("ue");
+  }, [props.status]);
   return (
     <div>
       {!editMode && (
