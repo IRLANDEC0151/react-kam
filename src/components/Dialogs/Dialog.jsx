@@ -17,13 +17,13 @@ const Dialogs = (props) => {
     <div className={s.dialogs}>
       <div className={s.dialogsItems}>
         {state.dialogsData.map((i) => (
-          <DialogItem item={i} />
+          <DialogItem item={i} key={i.id} />
         ))}
       </div>
       <div className={s.messages}>
         <div>
           {state.messagesData.map((i) => (
-            <Message item={i} />
+            <Message item={i} key={i.id} />
           ))}
         </div>
       </div>

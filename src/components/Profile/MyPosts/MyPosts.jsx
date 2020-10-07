@@ -5,17 +5,17 @@ import { Textarea } from "../../common/FormsControls/FormsControls";
 import s from "./MyPosts.module.css";
 import Post from "./Post/Post";
 
+const maxLength30 = maxLength(30);
 
-const maxLength30=maxLength(30)
-const MyPosts = (props) => {
-
+const MyPosts = React.memo((props) => {
   let addPost = (value) => {
     props.addPost(value.newPostBody);
   };
+  
   return (
     <div>
       <h3>My post</h3>
-        <AddPostFormRedux onSubmit={addPost}/>
+      <AddPostFormRedux onSubmit={addPost} />
 
       <div className={s.posts}>
         {props.posts.map((i) => (
@@ -24,13 +24,17 @@ const MyPosts = (props) => {
       </div>
     </div>
   );
-};
+});
 
 const AddPost = (props) => {
   return (
     <form onSubmit={props.handleSubmit}>
       <div>
-        <Field component={Textarea} name="newPostBody" validate={[requiredField, maxLength30]} />
+        <Field
+          component={Textarea}
+          name="newPostBody"
+          validate={[requiredField, maxLength30]}
+        />
       </div>
       <div>
         <button>Add Post</button>
