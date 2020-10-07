@@ -207,17 +207,34 @@ var getUsersThunkCreator = function getUsersThunkCreator(currentPage, pageSize) 
 };
 
 exports.getUsersThunkCreator = getUsersThunkCreator;
+var followUnfollow = async(dispatch, userId);
 
 var followThunkCreator = function followThunkCreator(userId) {
-  return function (dispatch) {
-    dispatch(toggleIsFollowingInProgress(true, userId));
+  return function _callee(dispatch) {
+    var apiMethod, res;
+    return regeneratorRuntime.async(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            apiMethod = _api.userAPI.follow.bind(_api.userAPI);
+            dispatch(toggleIsFollowingInProgress(true, userId));
+            _context.next = 4;
+            return regeneratorRuntime.awrap(_api.userAPI.followUsers(userId).then(function (resultCode) {
+              if (resultCode === 0) {
+                dispatch(acceptFollowUserToFriends(userId));
+              }
 
-    _api.userAPI.followUsers(userId).then(function (resultCode) {
-      if (resultCode === 0) {
-        dispatch(acceptFollowUserToFriends(userId));
+              dispatch(toggleIsFollowingInProgress(false, userId));
+            }));
+
+          case 4:
+            res = _context.sent;
+
+          case 5:
+          case "end":
+            return _context.stop();
+        }
       }
-
-      dispatch(toggleIsFollowingInProgress(false, userId));
     });
   };
 };

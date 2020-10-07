@@ -100,10 +100,14 @@ export const getUsersThunkCreator = (currentPage, pageSize) => {
             });
     }
 }
+const followUnfollow= async(dispatch, userId)
+
 export const followThunkCreator = (userId) => {
-    return (dispatch) => {
+    return async(dispatch) => {
+        let apiMethod=userAPI.follow.bind(userAPI)
         dispatch(toggleIsFollowingInProgress(true, userId));
-        userAPI.followUsers(userId).then((resultCode) => {
+
+       let res=await userAPI.followUsers(userId).then((resultCode) => {
             if (resultCode === 0) {
                 dispatch(acceptFollowUserToFriends(userId));
             }

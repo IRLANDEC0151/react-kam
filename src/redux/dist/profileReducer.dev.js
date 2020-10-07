@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.updateUserStatus = exports.getUserStatus = exports.getUserProfile = exports.setUserStatus = exports.setUserProfile = exports.addPostActionCreator = void 0;
+exports["default"] = exports.updateUserStatus = exports.getUserStatus = exports.getUserProfile = exports.setUserStatus = exports.setUserProfile = exports.deletePostActionCreator = exports.addPostActionCreator = void 0;
 
 var _api = require("../api/api");
 
@@ -22,7 +22,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var ADD_POST = 'ADD-POST';
-var UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
+var DELETE_POST = 'DELETE_POST';
 var SET_USER_PROFILE = 'SET_USER_PROFILE';
 var SET_STATUS = 'SET_STATUS';
 var initialState = {
@@ -70,6 +70,15 @@ var profileReducer = function profileReducer() {
         });
       }
 
+    case DELETE_POST:
+      {
+        return _objectSpread({}, state, {
+          postsData: state.postsData.filter(function (p) {
+            return p.id != action.postId;
+          })
+        });
+      }
+
     default:
       return state;
   }
@@ -83,6 +92,15 @@ var addPostActionCreator = function addPostActionCreator(newPostBody) {
 };
 
 exports.addPostActionCreator = addPostActionCreator;
+
+var deletePostActionCreator = function deletePostActionCreator(postId) {
+  return {
+    type: DELETE_POST,
+    postId: postId
+  };
+};
+
+exports.deletePostActionCreator = deletePostActionCreator;
 
 var setUserProfile = function setUserProfile(profileInfo) {
   return {
