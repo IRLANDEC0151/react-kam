@@ -1,4 +1,5 @@
 import { userAPI } from "../api/api";
+import { updateObjectInArray } from "../utils/validators/object-helpers";
 
 const UPLOAD_USERS = 'UPLOAD-USERS'
 const FOLLOW_USER_TO_FRIENDS = 'FOLLOW-USER-TO-FRIENDS'
@@ -26,22 +27,12 @@ const usersReducer = (state = initialState, action) => {
         }
         case FOLLOW_USER_TO_FRIENDS: {
             return {
-                ...state, users: state.users.map((u) => {
-                    if (u.id === action.userId) {
-                        return { ...u, followed: true }
-                    }
-                    return u
-                })
+                ...state, users: updateObjectInArray(state.users, action.userId, "id", { followed: true })
             }
         }
         case UNFOLLOW_USER_TO_FRIENDS: {
             return {
-                ...state, users: state.users.map((u) => {
-                    if (u.id === action.userId) {
-                        return { ...u, followed: false }
-                    }
-                    return u
-                })
+                ...state, users: updateObjectInArray(state.users, action.userId, "id", { followed: false })
             }
         }
         case SET_USERS: {
@@ -100,31 +91,27 @@ export const getUsersThunkCreator = (currentPage, pageSize) => {
             });
     }
 }
-const followUnfollow= async(dispatch, userId)
+const followUnfollow = async (dispatch, userId, apiMethod, actionCreator) => {
+    dispatch(toggleIsFollowingInProgress(true, userId));
+    let res = await apiMethod(userId)
+    if (res.data.resultCode === 0) {
+        dispatch(actionCreator(userId));
+    }
+    dispatch(toggleIsFollowingInProgress(false, userId));
+}
 
 export const followThunkCreator = (userId) => {
-    return async(dispatch) => {
-        let apiMethod=userAPI.follow.bind(userAPI)
-        dispatch(toggleIsFollowingInProgress(true, userId));
-
-       let res=await userAPI.followUsers(userId).then((resultCode) => {
-            if (resultCode === 0) {
-                dispatch(acceptFollowUserToFriends(userId));
-            }
-            dispatch(toggleIsFollowingInProgress(false, userId));
-        });
+    let apiMethod = userAPI.followUsers.bind(userAPI)
+    return async (dispatch) => {
+        followUnfollow(dispatch, userId, apiMethod, acceptFollowUserToFriends)
     }
 }
 
 export const unFollowThunkCreator = (userId) => {
-    return (dispatch) => {
-        dispatch(toggleIsFollowingInProgress(true, userId));
-        userAPI.unFollowUsers(userId).then((resultCode) => {
-            if (resultCode === 0) {
-                dispatch(acceptUnFollowUserToFriends(userId));
-            }
-            dispatch(toggleIsFollowingInProgress(false, userId));
-        });
+    let apiMethod = userAPI.unFollowUsers.bind(userAPI)
+    return async (dispatch) => {
+        followUnfollow(dispatch, userId, apiMethod, acceptUnFollowUserToFriends)
     }
 }
+
 export default usersReducer 

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import NavBar from "./components/NavBar/NavBar";
-import { Route, BrowserRouter, withRouter } from "react-router-dom";
+import { Route } from "react-router-dom";
 import News from "./components/News/News";
 import Music from "./components/Music/Music";
 import Settings from "./components/Settings/Settings";
@@ -25,7 +25,6 @@ class App extends Component {
       return <Preloader />;
     }
     return (
-      <BrowserRouter>
         <div className="app-wrapper">
           <HeaderContainer />
           <NavBar />
@@ -42,7 +41,6 @@ class App extends Component {
             <Route path="/login" render={() => <Login />} />
           </div>
         </div>
-      </BrowserRouter>
     );
   }
 }

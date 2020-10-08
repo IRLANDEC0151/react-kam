@@ -7,6 +7,8 @@ exports["default"] = exports.unFollowThunkCreator = exports.followThunkCreator =
 
 var _api = require("../api/api");
 
+var _objectHelpers = require("../utils/validators/object-helpers");
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -51,14 +53,8 @@ var usersReducer = function usersReducer() {
     case FOLLOW_USER_TO_FRIENDS:
       {
         return _objectSpread({}, state, {
-          users: state.users.map(function (u) {
-            if (u.id === action.userId) {
-              return _objectSpread({}, u, {
-                followed: true
-              });
-            }
-
-            return u;
+          users: (0, _objectHelpers.updateObjectInArray)(state.users, action.userId, "id", {
+            followed: true
           })
         });
       }
@@ -66,14 +62,8 @@ var usersReducer = function usersReducer() {
     case UNFOLLOW_USER_TO_FRIENDS:
       {
         return _objectSpread({}, state, {
-          users: state.users.map(function (u) {
-            if (u.id === action.userId) {
-              return _objectSpread({}, u, {
-                followed: false
-              });
-            }
-
-            return u;
+          users: (0, _objectHelpers.updateObjectInArray)(state.users, action.userId, "id", {
+            followed: false
           })
         });
       }
@@ -207,32 +197,47 @@ var getUsersThunkCreator = function getUsersThunkCreator(currentPage, pageSize) 
 };
 
 exports.getUsersThunkCreator = getUsersThunkCreator;
-var followUnfollow = async(dispatch, userId);
+
+var followUnfollow = function followUnfollow(dispatch, userId, apiMethod, actionCreator) {
+  var res;
+  return regeneratorRuntime.async(function followUnfollow$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          dispatch(toggleIsFollowingInProgress(true, userId));
+          _context.next = 3;
+          return regeneratorRuntime.awrap(apiMethod(userId));
+
+        case 3:
+          res = _context.sent;
+
+          if (res.data.resultCode === 0) {
+            dispatch(actionCreator(userId));
+          }
+
+          dispatch(toggleIsFollowingInProgress(false, userId));
+
+        case 6:
+        case "end":
+          return _context.stop();
+      }
+    }
+  });
+};
 
 var followThunkCreator = function followThunkCreator(userId) {
+  var apiMethod = _api.userAPI.followUsers.bind(_api.userAPI);
+
   return function _callee(dispatch) {
-    var apiMethod, res;
-    return regeneratorRuntime.async(function _callee$(_context) {
+    return regeneratorRuntime.async(function _callee$(_context2) {
       while (1) {
-        switch (_context.prev = _context.next) {
+        switch (_context2.prev = _context2.next) {
           case 0:
-            apiMethod = _api.userAPI.follow.bind(_api.userAPI);
-            dispatch(toggleIsFollowingInProgress(true, userId));
-            _context.next = 4;
-            return regeneratorRuntime.awrap(_api.userAPI.followUsers(userId).then(function (resultCode) {
-              if (resultCode === 0) {
-                dispatch(acceptFollowUserToFriends(userId));
-              }
+            followUnfollow(dispatch, userId, apiMethod, acceptFollowUserToFriends);
 
-              dispatch(toggleIsFollowingInProgress(false, userId));
-            }));
-
-          case 4:
-            res = _context.sent;
-
-          case 5:
+          case 1:
           case "end":
-            return _context.stop();
+            return _context2.stop();
         }
       }
     });
@@ -242,15 +247,20 @@ var followThunkCreator = function followThunkCreator(userId) {
 exports.followThunkCreator = followThunkCreator;
 
 var unFollowThunkCreator = function unFollowThunkCreator(userId) {
-  return function (dispatch) {
-    dispatch(toggleIsFollowingInProgress(true, userId));
+  var apiMethod = _api.userAPI.unFollowUsers.bind(_api.userAPI);
 
-    _api.userAPI.unFollowUsers(userId).then(function (resultCode) {
-      if (resultCode === 0) {
-        dispatch(acceptUnFollowUserToFriends(userId));
+  return function _callee2(dispatch) {
+    return regeneratorRuntime.async(function _callee2$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            followUnfollow(dispatch, userId, apiMethod, acceptUnFollowUserToFriends);
+
+          case 1:
+          case "end":
+            return _context3.stop();
+        }
       }
-
-      dispatch(toggleIsFollowingInProgress(false, userId));
     });
   };
 };

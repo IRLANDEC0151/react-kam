@@ -29,14 +29,10 @@ var userAPI = {
     });
   },
   followUsers: function followUsers(userId) {
-    return instance.post("follow/".concat(userId)).then(function (res) {
-      return res.data.resultCode;
-    });
+    return instance.post("follow/".concat(userId));
   },
   unFollowUsers: function unFollowUsers(userId) {
-    return instance["delete"]("follow/".concat(userId)).then(function (res) {
-      return res.data.resultCode;
-    });
+    return instance["delete"]("follow/".concat(userId));
   }
 };
 exports.userAPI = userAPI;
