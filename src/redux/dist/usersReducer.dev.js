@@ -33,7 +33,7 @@ var TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
 var TOGGLE_IS_FOLLOWING_IN_PROGRESS = 'TOGGLE_IS_FOLLOWING_IN_PROGRESS';
 var initialState = {
   users: [],
-  pageSize: 100,
+  pageSize: 20,
   totalUsersCount: 0,
   currentPage: 1,
   isFetching: false,

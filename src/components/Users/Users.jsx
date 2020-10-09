@@ -10,6 +10,7 @@ let Users = (props) => {
         onPageChanged={props.onPageChanged}
         totalItemsCount={props.totalUsersCount}
         pageSize={props.pageSize}
+        portionSize={10}
       />
       {props.users.map((u) => (
         <User
