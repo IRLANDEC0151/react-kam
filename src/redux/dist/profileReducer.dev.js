@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.updateUserStatus = exports.getUserStatus = exports.getUserProfile = exports.setUserStatus = exports.setUserProfile = exports.deletePostActionCreator = exports.addPostActionCreator = void 0;
+exports["default"] = exports.savePhoto = exports.updateUserStatus = exports.getUserStatus = exports.getUserProfile = exports.setPhoto = exports.setUserStatus = exports.setUserProfile = exports.deletePostActionCreator = exports.addPostActionCreator = void 0;
 
 var _api = require("../api/api");
 
@@ -25,6 +25,7 @@ var ADD_POST = 'ADD-POST';
 var DELETE_POST = 'DELETE_POST';
 var SET_USER_PROFILE = 'SET_USER_PROFILE';
 var SET_STATUS = 'SET_STATUS';
+var SET_PHOTO = 'SET_PHOTO';
 var initialState = {
   postsData: [{
     id: 1,
@@ -79,6 +80,15 @@ var profileReducer = function profileReducer() {
         });
       }
 
+    case SET_PHOTO:
+      {
+        return _objectSpread({}, state, {
+          profileInfo: _objectSpread({}, state.profileInfo, {
+            photos: action.photos
+          })
+        });
+      }
+
     default:
       return state;
   }
@@ -116,10 +126,19 @@ var setUserStatus = function setUserStatus(status) {
     type: SET_STATUS,
     status: status
   };
+};
+
+exports.setUserStatus = setUserStatus;
+
+var setPhoto = function setPhoto(photos) {
+  return {
+    type: SET_PHOTO,
+    photos: photos
+  };
 }; //thunk
 
 
-exports.setUserStatus = setUserStatus;
+exports.setPhoto = setPhoto;
 
 var getUserProfile = function getUserProfile(userId) {
   return function (dispatch) {
@@ -152,5 +171,33 @@ var updateUserStatus = function updateUserStatus(status) {
 };
 
 exports.updateUserStatus = updateUserStatus;
+
+var savePhoto = function savePhoto(file) {
+  return function _callee(dispatch) {
+    var res;
+    return regeneratorRuntime.async(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return regeneratorRuntime.awrap(_api.profileAPI.savePhoto(file));
+
+          case 2:
+            res = _context.sent;
+
+            if (res.data.resultCode === 0) {
+              dispatch(setPhoto(res.data.data.photos));
+            }
+
+          case 4:
+          case "end":
+            return _context.stop();
+        }
+      }
+    });
+  };
+};
+
+exports.savePhoto = savePhoto;
 var _default = profileReducer;
 exports["default"] = _default;

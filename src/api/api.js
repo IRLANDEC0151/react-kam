@@ -15,11 +15,11 @@ export const userAPI = {
     },
     followUsers(userId) {
         return instance.post(`follow/${userId}`)
-           
+
     },
     unFollowUsers(userId) {
         return instance.delete(`follow/${userId}`)
-            
+
     },
 
 }
@@ -34,6 +34,16 @@ export const profileAPI = {
     },
     updateStatus(status) {
         return instance.put(`profile/status`, { status })
+
+    },
+    savePhoto(photoFile) {
+        let formData = new FormData()
+        formData.append('image', photoFile)
+        return instance.put(`profile/photo`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
 
     }
 }
