@@ -3,7 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.savePhoto = exports.updateUserStatus = exports.getUserStatus = exports.getUserProfile = exports.setPhoto = exports.setUserStatus = exports.setUserProfile = exports.deletePostActionCreator = exports.addPostActionCreator = void 0;
+exports["default"] = exports.saveProfile = exports.savePhoto = exports.updateUserStatus = exports.getUserStatus = exports.getUserProfile = exports.setPhoto = exports.setUserStatus = exports.setUserProfile = exports.deletePostActionCreator = exports.addPostActionCreator = void 0;
+
+var _reduxForm = require("redux-form");
 
 var _api = require("../api/api");
 
@@ -199,5 +201,47 @@ var savePhoto = function savePhoto(file) {
 };
 
 exports.savePhoto = savePhoto;
+
+var saveProfile = function saveProfile(profile) {
+  return function _callee2(dispatch, getState) {
+    var userId, res;
+    return regeneratorRuntime.async(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            userId = getState().auth.userId;
+            _context2.next = 3;
+            return regeneratorRuntime.awrap(_api.profileAPI.saveProfile(profile));
+
+          case 3:
+            res = _context2.sent;
+
+            if (!(res.data.resultCode === 0)) {
+              _context2.next = 8;
+              break;
+            }
+
+            dispatch(getUserProfile(userId));
+            _context2.next = 10;
+            break;
+
+          case 8:
+            dispatch((0, _reduxForm.stopSubmit)("ediProfile", {
+              "contacts": {
+                "facebook": res.data.messages[0]
+              }
+            }));
+            return _context2.abrupt("return", new Promise.reject(res.data.messages[0]));
+
+          case 10:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    });
+  };
+};
+
+exports.saveProfile = saveProfile;
 var _default = profileReducer;
 exports["default"] = _default;

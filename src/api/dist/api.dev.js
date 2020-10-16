@@ -5,7 +5,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.authAPI = exports.profileAPI = exports.userAPI = void 0;
+exports.securityAPI = exports.authAPI = exports.profileAPI = exports.userAPI = void 0;
 
 var axios = _interopRequireWildcard(require("axios"));
 
@@ -60,6 +60,9 @@ var profileAPI = {
         'Content-Type': 'multipart/form-data'
       }
     });
+  },
+  saveProfile: function saveProfile(profile) {
+    return instance.put("profile", profile);
   }
 };
 exports.profileAPI = profileAPI;
@@ -73,19 +76,30 @@ var authAPI = {
     var email = _ref.email,
         password = _ref.password,
         _ref$rememberMe = _ref.rememberMe,
-        rememberMe = _ref$rememberMe === void 0 ? false : _ref$rememberMe;
+        rememberMe = _ref$rememberMe === void 0 ? false : _ref$rememberMe,
+        _ref$captcha = _ref.captcha,
+        captcha = _ref$captcha === void 0 ? null : _ref$captcha;
     return instance.post("auth/login", {
       email: email,
       password: password,
-      rememberMe: rememberMe
+      rememberMe: rememberMe,
+      captcha: captcha
     }).then(function (res) {
       return res.data;
     });
   },
-  loginOut: function loginOut(data) {
+  loginOut: function loginOut() {
     return instance["delete"]("auth/login").then(function (res) {
       return res.data;
     });
   }
 };
 exports.authAPI = authAPI;
+var securityAPI = {
+  getCaptchaUrl: function getCaptchaUrl() {
+    return instance.get("security/get-captcha-url").then(function (res) {
+      return res.data;
+    });
+  }
+};
+exports.securityAPI = securityAPI;

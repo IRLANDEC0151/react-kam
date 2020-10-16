@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.logOut = exports.login = exports.getAuthUserData = exports.setAuthUserData = void 0;
+exports["default"] = exports.getCaptchaUrl = exports.logOut = exports.login = exports.getAuthUserData = exports.getCaptchaUrlSuccess = exports.setAuthUserData = void 0;
 
 var _reduxForm = require("redux-form");
 
@@ -16,11 +16,13 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var SET_USER_DATA = 'SET_USER_DATA';
+var GET_CAPTCHA_SUCCESS = 'GET_CAPTCHA_SUCCESS';
 var initialState = {
   userId: null,
   email: null,
   login: null,
-  isAuth: false
+  isAuth: false,
+  captchaUrl: null
 };
 
 var authReducer = function authReducer() {
@@ -29,9 +31,8 @@ var authReducer = function authReducer() {
 
   switch (action.type) {
     case SET_USER_DATA:
-      {
-        return _objectSpread({}, state, {}, action.data);
-      }
+    case GET_CAPTCHA_SUCCESS:
+      return _objectSpread({}, state, {}, action.data);
 
     default:
       return state;
@@ -52,10 +53,21 @@ var setAuthUserData = function setAuthUserData() {
       isAuth: isAuth
     }
   };
+};
+
+exports.setAuthUserData = setAuthUserData;
+
+var getCaptchaUrlSuccess = function getCaptchaUrlSuccess(captchaUrl) {
+  return {
+    type: GET_CAPTCHA_SUCCESS,
+    data: {
+      captchaUrl: captchaUrl
+    }
+  };
 }; //thunk 
 
 
-exports.setAuthUserData = setAuthUserData;
+exports.getCaptchaUrlSuccess = getCaptchaUrlSuccess;
 
 var getAuthUserData = function getAuthUserData() {
   return function (dispatch) {
@@ -81,11 +93,13 @@ var login = function login(data) {
     _api.authAPI.login(data).then(function (data) {
       if (data.resultCode === 0) {
         dispatch(getAuthUserData(data));
-      } else {
-        dispatch((0, _reduxForm.stopSubmit)("login", {
-          _error: data.messages[0]
-        }));
+      } else if (data.resultCode === 10) {
+        dispatch(getCaptchaUrl());
       }
+
+      dispatch((0, _reduxForm.stopSubmit)("login", {
+        _error: data.messages[0]
+      }));
     });
   };
 }; //thunk 
@@ -101,8 +115,35 @@ var logOut = function logOut(data) {
       }
     });
   };
-};
+}; //thunk 
+
 
 exports.logOut = logOut;
+
+var getCaptchaUrl = function getCaptchaUrl() {
+  return function _callee(dispatch) {
+    var data, captchaUrl;
+    return regeneratorRuntime.async(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return regeneratorRuntime.awrap(_api.securityAPI.getCaptchaUrl());
+
+          case 2:
+            data = _context.sent;
+            captchaUrl = data.url;
+            dispatch(getCaptchaUrlSuccess(captchaUrl));
+
+          case 5:
+          case "end":
+            return _context.stop();
+        }
+      }
+    });
+  };
+};
+
+exports.getCaptchaUrl = getCaptchaUrl;
 var _default = authReducer;
 exports["default"] = _default;

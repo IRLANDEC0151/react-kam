@@ -17,20 +17,24 @@ const Login = (props) => {
   return (
     <div>
       <h1>LOGIN</h1>
-      <LoginReduxForm onSubmit={onSubmit} />
+      <LoginReduxForm onSubmit={onSubmit} captchaUrl={props.captchaUrl} />
     </div>
   );
 };
 
-const LoginForm = ({ handleSubmit, error }) => {
+const LoginForm = ({ handleSubmit, error, captchaUrl }) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-          {createField("email", "email", "email", Input, [requiredField])}
-          {createField("password", "password", "password", Input, [
-            requiredField,
-          ])}
-          {createField("checkbox", "", "rememberMe", Input,[],'  remember me')}
+        {createField("email", "email", "email", Input, [requiredField])}
+        {createField("password", "password", "password", Input, [
+          requiredField,
+        ])}
+        {createField("checkbox", "", "rememberMe", Input, [], "  remember me")}
+
+        {captchaUrl && <img src={captchaUrl} />}
+        {captchaUrl &&
+          createField("text", "", "captcha", Input, [requiredField], "")}
         {error && <div className={s.formError}>{error}</div>}
 
         <div>
@@ -48,6 +52,7 @@ const LoginReduxForm = reduxForm({
 const mapStateToProps = (state) => {
   return {
     isAuth: state.auth.isAuth,
+    captchaUrl: state.auth.captchaUrl,
   };
 };
 export default connect(mapStateToProps, { login })(Login);
